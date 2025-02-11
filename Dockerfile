@@ -1,27 +1,27 @@
-FROM php:8.3.16-fpm-bookworm
+FROM php:8.3.16-fpm-alpine3.20
 
 WORKDIR /var/www
 COPY ./my_project .
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-
-RUN apt-get update && apt-get upgrade -y && apt-get install 7zip nginx libicu-dev -y \
+RUN apk update && apk upgrade && apk --no-cache add 7zip nginx icu-dev icu-libs bash \
+    && apk --no-cache add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ dart-sass \
+    && apk add --no-cache dart-sass \
+    && composer require symfonycasts/sass-bundle \
     && docker-php-ext-install intl \
     && composer install --no-interaction --optimize-autoloader\
     && php bin/console assets:install\
     && php bin/console asset-map:compile\
-    && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && chown -R www-data:www-data /var/www
 
-# COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY config/default.conf /etc/nginx/sites-available/default
 COPY config/default.conf /etc/nginx/conf.d/default.conf
 
-# Копіюємо конфігурацію PHP
 COPY config/php.ini /usr/local/etc/php/php.ini
 
-# Запуск PHP-FPM та Nginx
-CMD ["bash", "-c", "service nginx start && php-fpm"]
+CMD ["sh", "-c", "nginx -g 'daemon off;' & php-fpm"]
+
 
 EXPOSE 80
