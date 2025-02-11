@@ -11,7 +11,9 @@ on:
 jobs:
     build:
         name: Build Docker Image
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-latest  
+        permissions:
+          packages: write
     
         steps:
           - name: Repo Checkout

@@ -9,7 +9,7 @@ RUN apk update && apk upgrade && apk --no-cache add 7zip nginx icu-dev icu-libs 
     && apk --no-cache add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ dart-sass \
     && apk add --no-cache dart-sass \
     && composer require symfonycasts/sass-bundle \
-    && apk add php83-intl \
+    && docker-php-ext-install intl \
     && composer install --no-interaction --optimize-autoloader\
     && php bin/console assets:install\
     && php bin/console asset-map:compile\
