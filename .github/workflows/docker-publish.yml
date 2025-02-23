@@ -37,16 +37,3 @@ jobs:
             with:
               push: true
               tags: ghcr.io/${{ github.repository_owner }}/symfony-demo:latest
-          # - name: Збірка Docker-образу
-          #   run: |
-          #     docker build -t ghcr.io/${{ github.repository_owner }}/symfony-demo:latest .
-    
-          # - name: Завантаження створеного образу в кеш
-          #   run: |
-          #     docker save ghcr.io/${{ github.repository_owner }}/symfony-demo:latest -o image.tar
-    
-          # - name: Завантаження кешованого образу як артефакт
-          #   uses: actions/upload-artifact@v4
-          #   with:
-          #     name: docker-image
-          #     path: image.tar
